@@ -1,6 +1,7 @@
 const sequelize= require('sequelize');
 const db = require ('../database/index');
 const validator = require('validator');
+const person = require('./person');
 const User = db.define("User", {
     fullName: {
       type: sequelize.STRING,
@@ -11,21 +12,19 @@ const User = db.define("User", {
       type: sequelize.STRING,
       allowNull: false,
     },
+    role : {
+      type: sequelize.STRING,
+      enum : ['user' ,'admin'],
+      default : 'user',
+
+    },
     password: {
         type: sequelize.STRING,
         allowNull: false,
       },
-    //   passwordConfirm: {
-    //     type: String,
-    //     required: [true, 'Please confirm your password'],
-    //     validate: {
-    //       // This only works on CREATE and SAVE!!!
-    //       validator: function(el) {
-    //         return el === this.password;
-    //       },
-    //       message: 'Passwords are not the same!'
-    //     }
-    // },
+  });
+  db.sync({alter:true}).then(()=>{
+    console.log('all models are created '); 
   });
   
   module.exports = User;

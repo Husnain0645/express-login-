@@ -3,14 +3,15 @@ const {Sequelize} =require ('sequelize');
 const sequelize = new Sequelize('Logindb','postgres' , '111111' , {
     host: 'localhost',
     dialect: 'postgres',
+    logging: false,
 
 
 }) ;
-sequelize.sync();
+// sequelize.sync();
 
 (async () => {
     try {
-      await db.authenticate();
+      await sequelize.authenticate();
       console.log("Connection has been established successfully.");
     } catch (error) {
       console.error("Unable to connect to the database:", error);

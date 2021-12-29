@@ -4,6 +4,9 @@ var bodyParser = require('body-parser');
 const User = require("./models/user");
 const res = require('express/lib/response');
 const userRouter = require('./routes/userroutes');
+const protectedroute = require('./routes/protectedroute');
+const req = require('express/lib/request');
+const cookieParser=require('cookie-parser');
 require("dotenv").config();
 
 const app =express();
@@ -21,9 +24,12 @@ app.use(bodyParser.json());
     //     });
     
     // });
-    
+    app.get('/' ,(req, res)=>{
+        res.status(500).json({ message: "Index" });
+    })
     app.use('/', userRouter);
-
+    app.use('/', protectedroute);
+    app.use(cookieParser())
 
 // app.get('/' , (req , res ) => {
 //  res.status(200)
