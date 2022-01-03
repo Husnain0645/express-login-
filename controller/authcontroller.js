@@ -1,4 +1,4 @@
-
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('./../models/user');
 const bcrypt = require('bcrypt');
@@ -89,8 +89,31 @@ exports.restrictTo = (...roles)=>
 
 // forgot Password 
 exports.forgotpassword = (async(req,res) =>{
+  //Find User By Email 
+  const {email} = req.body;
+  const user = await User.findOne( {where : { email} });
+    if(!user)
+    {
+      res.json({
+        message : "Email Does Not Exist "
+      })
+    }
+    //createrandom token 
+    const resetToken = crypto.randomBytes(32).toString('hex');
+//hash it 
+    user.passwordResetTokeb = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+  
+    console.log({ resetToken },    user.passwordResetTokeb);
+  
+    user.passwordExpireAt = Date.now() + 10 * 60 * 1000;
+   await user.save();
 
-});
+
+
+  });
 //Resetpassword 
 exports.ResetPassword = (async(req,res) =>{
 
