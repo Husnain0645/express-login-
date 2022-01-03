@@ -22,6 +22,13 @@ const User = db.define("User", {
         type: sequelize.STRING,
         allowNull: false,
       },
+      passwordExpireAt : {
+        type : sequelize.DATE,
+      },
+      passwordResetTokeb : {
+        type : sequelize.STRING,
+      },
+
   });
   db.sync({alter:true}).then(()=>{
     console.log('all models are created '); 

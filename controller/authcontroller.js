@@ -87,3 +87,11 @@ exports.restrictTo = (...roles)=>
   };
 };
 
+// forgot Password 
+exports.forgotpassword = (async(req,res) =>{
+
+});
+//Resetpassword 
+exports.ResetPassword = (async(req,res) =>{
+
+});
