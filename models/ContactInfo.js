@@ -1,19 +1,15 @@
 const sequelize= require('sequelize');
 const db = require ('../database/index');
-const Person = db.define("human", {
-    fullName: {
+// const validator = require('validator');
+const ContactInfo = db.define("ContactInfo", {
+    phone : {
       type: sequelize.STRING,
       allowNull: false,
     },
-    email: {
+    address: {
       type: sequelize.STRING,
       allowNull: false,
     },
-    password: {
-        type: sequelize.STRING,
-        
-      },
-    
   });
   
-  module.exports = Person;
+  module.exports = ContactInfo;
