@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('./../models/user');
 const bcrypt = require('bcrypt');
+const sendEmail = require('./../utilis/email');
 // require("dotenv").config();
 let userstate;
 
@@ -110,9 +111,31 @@ exports.forgotpassword = (async(req,res) =>{
   
     user.passwordExpireAt = Date.now() + 10 * 60 * 1000;
    await user.save();
+   ///////////////////////////////
 
+   ///////////////////////////////////
+   const resetUrl= `${req.protocol}: //${req.get ('host')}/users/resetPassword/${resetToken}`
+   
+   const message= `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetUrl}.\nIf you didn't forget your password, please ignore this email!`;
 
+///sending mail 
+   try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Your password reset token (valid for 10 min)',
+      message
+    });
 
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to email!'
+    });
+  } catch (err) {
+    user.passwordResetTokeb = undefined;
+    user.passwordExpireAt = undefined;
+    await user.save();
+      console.log(err.message);
+  }
   });
 //Resetpassword 
 exports.ResetPassword = (async(req,res) =>{
