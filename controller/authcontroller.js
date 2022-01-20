@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const User = require('./../models/user');
 const bcrypt = require('bcrypt');
 const sendEmail = require('./../utilis/email');
+const {Op}= require('sequelize');
+// const { request } = require('http');
 // require("dotenv").config();
 let userstate;
 
@@ -114,7 +116,7 @@ exports.forgotpassword = (async(req,res) =>{
    ///////////////////////////////
 
    ///////////////////////////////////
-   const resetUrl= `${req.protocol}: //${req.get ('host')}/users/resetPassword/${resetToken}`
+   const resetUrl= `${req.protocol}: //${req.get ('host')}/users/resetPassword/${user.passwordResetTokeb}`
    
    const message= `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetUrl}.\nIf you didn't forget your password, please ignore this email!`;
 
@@ -139,5 +141,12 @@ exports.forgotpassword = (async(req,res) =>{
   });
 //Resetpassword 
 exports.ResetPassword = (async(req,res) =>{
+//find User Based on Token in Params 
+const user =await User.findOne({passwordResetTokeb : req.params.token}).catch((err)=> {
+  res.status(500).json({
+    Error : err.message
+  })
+});
+
 
 });
